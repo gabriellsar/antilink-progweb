@@ -1,9 +1,31 @@
-version: '3.7'
+version: '3.8'
 
 services:
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=coach_db
+      - POSTGRES_USER=admin_coach
+      - POSTGRES_PASSWORD=senha_secreta_123
+    ports:
+      - "5432:5432"
+
   web:
     build: .
-    container_name: antilink
-    volumes: .:/app
-    ports: "8000:8000"
     command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_DB=coach_db
+      - POSTGRES_USER=admin_coach
+      - POSTGRES_PASSWORD=senha_secreta_123
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
