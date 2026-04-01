@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card auth-wrapper">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2><i class="fa-solid fa-user-plus" style="color: var(--accent-orange); margin-right: 10px;"></i>Junte-se ao Fundo do Poço</h2>
+        <p style="color: #aaa; margin-top: 10px;">Crie sua conta para começar a documentar sua incompetência publicamente e receber endossos.</p>
+    </div>
+    
+    <form method="post" class="auth-form">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <div class="action-buttons">
+            <button type="submit" class="btn-danger" style="width: 100%; padding: 12px;">
+                <i class="fa-solid fa-check"></i> Cadastrar
+            </button>
+            
+            <a href="{% url 'login' %}" class="btn-secondary">
+                <i class="fa-solid fa-arrow-left"></i> Já sofro aqui (Fazer Login)
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

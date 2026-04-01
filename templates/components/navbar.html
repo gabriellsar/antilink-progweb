@@ -1,0 +1,33 @@
+<nav class="navbar">
+    <a href="{% url 'feed_global' %}" class="navbar-brand">
+        <i class="fa-brands fa-linkedin fa-flip-vertical" style="color: var(--accent-orange);"></i> Anti-LinkedIn
+    </a>
+    
+    <div class="nav-links">
+        {% if user.is_authenticated %}
+            <form action="{% url 'buscar_usuarios' %}" method="get" class="search-form">
+                <input type="text" name="q" placeholder="Buscar incompetentes..." class="search-input" required>
+                <button type="submit" class="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+
+            <a href="{% url 'feed_global' %}" class="nav-item">
+                <i class="fa-solid fa-fire"></i> Home
+            </a>
+
+            <a href="{% url 'perfil_publico' user.username %}" class="nav-item">
+                <i class="fa-solid fa-user-astronaut"></i> Meu Perfil
+            </a>
+
+            <form action="{% url 'logout' %}" method="post" style="display:inline; margin: 0;">
+                {% csrf_token %}
+                <button type="submit" class="logout-btn">
+                    <i class="fa-solid fa-door-open"></i> Sair
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}" class="nav-item">
+                <i class="fa-solid fa-right-to-bracket"></i> Entrar e Sofrer
+            </a>
+        {% endif %}
+    </div>
+</nav>

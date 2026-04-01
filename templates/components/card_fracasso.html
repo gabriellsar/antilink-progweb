@@ -1,0 +1,106 @@
+<div class="card feed-post-card">
+    <div class="post-header-meta">
+        <span class="post-author-wrapper">
+            <a href="{% url 'perfil_publico' fracasso.usuario.username %}" class="post-author-link">
+                @{{ fracasso.usuario.username }}
+            </a>
+        </span>
+        <span class="post-date">{{ fracasso.data_do_ocorrido|date:"d/m/Y" }}</span>
+    </div>
+    
+    <h3 class="post-title">{{ fracasso.titulo }}</h3>
+    <p class="post-severity"> 
+        Nível do Estrago: <strong>{{ fracasso.get_nivel_vergonha_display }}</strong>
+    </p>
+    <p class="post-description">{{ fracasso.descricao }}</p>
+
+    <div class="interacoes-wrapper">
+        {% with reacoes=fracasso.reacoes.all|dictsortreversed:"id" %}
+            {% if reacoes %}
+            <div class="reaction-feedback">
+                <div class="reaction-icons-stack">
+                    {% for r in reacoes|slice:":3" %}
+                        <span class="react-icon-mini react-{{ r.tipo|lower }}" title="{{ r.tipo }}">
+                            {% if r.tipo == 'LIKE' %}<i class="fa-solid fa-thumbs-up"></i>{% endif %}
+                            {% if r.tipo == 'RISO' %}<i class="fa-solid fa-face-grin-squint-tears"></i>{% endif %}
+                            {% if r.tipo == 'FACEPALM' %}<i class="fa-solid fa-person-praying"></i>{% endif %}
+                            {% if r.tipo == 'APOIO' %}<i class="fa-solid fa-handshake-angle"></i>{% endif %}
+                            {% if r.tipo == 'SURPRESA' %}<i class="fa-solid fa-face-surprise"></i>{% endif %}
+                        </span>
+                    {% endfor %}
+                </div>
+                <span class="reaction-text">
+                    <strong>{{ reacoes.0.usuario.username }}</strong> 
+                    {% if reacoes|length > 1 %}
+                        e outras {{ reacoes|length|add:"-1" }} pessoas julgaram
+                    {% else %}
+                        julgou este erro
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+        {% endwith %}
+
+        <div class="post-actions-bar">
+            <div class="reaction-container">
+                <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="tipo" value="LIKE">
+                    <button type="submit" class="btn-main-action">
+                        <i class="fa-solid fa-thumbs-up"></i> Reagir
+                    </button>
+                </form>
+
+                <div class="reaction-popup">
+                    <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">{% csrf_token %}
+                        <input type="hidden" name="tipo" value="LIKE">
+                        <button type="submit" class="btn-react react-like" title="Gostei"><i class="fa-solid fa-thumbs-up"></i></button>
+                    </form>
+                    <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">{% csrf_token %}
+                        <input type="hidden" name="tipo" value="RISO">
+                        <button type="submit" class="btn-react react-riso" title="Rindo da desgraça"><i class="fa-solid fa-face-grin-squint-tears"></i></button>
+                    </form>
+                    <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">{% csrf_token %}
+                        <input type="hidden" name="tipo" value="FACEPALM">
+                        <button type="submit" class="btn-react react-facepalm" title="Mão na Testa"><i class="fa-solid fa-person-praying"></i></button>
+                    </form>
+                    <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">{% csrf_token %}
+                        <input type="hidden" name="tipo" value="APOIO">
+                        <button type="submit" class="btn-react react-apoio" title="Força Guerreiro"><i class="fa-solid fa-handshake-angle"></i></button>
+                    </form>
+                    <form action="{% url 'alternar_reacao' fracasso.id %}" method="post" class="reaction-form">{% csrf_token %}
+                        <input type="hidden" name="tipo" value="SURPRESA">
+                        <button type="submit" class="btn-react react-surpresa" title="Como assim?!"><i class="fa-solid fa-face-surprise"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="btn-main-action disabled">
+                <i class="fa-solid fa-comment"></i> {{ fracasso.comentarios.count }} Ofensas
+            </div>
+        </div>
+
+        <div class="comentarios-section">
+            <form action="{% url 'adicionar_comentario' fracasso.id %}" method="post" class="comment-form">
+                {% csrf_token %}
+                <input type="text" name="texto" class="comentario-input" placeholder="Dê aquele conselho passivo-agressivo..." required>
+                <button type="submit" class="btn-danger btn-send-comment">
+                    <i class="fa-solid fa-paper-plane"></i>
+                </button>
+            </form>
+
+            <div>
+                {% for comentario in fracasso.comentarios.all|slice:":3" %}
+                    <div class="comentario-item">
+                        <strong class="comment-author">@{{ comentario.autor.username }}:</strong> 
+                        <span class="comment-text">{{ comentario.texto }}</span>
+                    </div>
+                {% empty %}
+                    <p class="empty-comments-msg">
+                        Um silêncio constrangedor paira sobre este erro. Seja o primeiro a julgar.
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
