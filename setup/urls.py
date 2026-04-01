@@ -10,4 +10,5 @@ urlpatterns = [
     path('usuarios/', include('usuarios.urls')),
 
     # mural/urls.py
+    path('', include('mural.urls')),
 ]
