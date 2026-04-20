@@ -43,16 +43,22 @@ class PerfilPublicoView(DetailView):
         """Injeta dados extras (fracassos, depoimentos e formulário) no template HTML."""
         context = super().get_context_data(**kwargs)
         context['fracassos'] = Fracasso.objects.filter(usuario=self.object).order_by('-data_do_ocorrido')
-        context['depoimentos'] = self.object.depoimentos_recebidos.all().order_by('-data_criacao')
+        context['depoimentos'] = Fracasso.objects.filter(alvo=self.object).select_related('autor').order_by('-data_criacao')
         context['form_depoimento'] = DepoimentoForm()
         return context
-
+    
 class AdicionarDepoimentoView(LoginRequiredMixin, View):
     """
     Processa o envio de um novo depoimento.
     """
     def post(self, request, username):
         alvo = get_object_or_404(User, username=username)
+        form = DepoimentoForm(request.POST)
+
+        if request.user == alvo:
+            messages.error(request, "Auto-sabotagem é feio. Você não pode endossar a si mesmo.")
+            return redirect('perfil_publico', username=username)
+            
         form = DepoimentoForm(request.POST)
         
         if form.is_valid():
