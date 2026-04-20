@@ -19,7 +19,7 @@ class FeedGlobalView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         """Retorna todos os fracassos ordenados pelos mais recentes."""
-        return Fracasso.objects.all().order_by('-data_do_ocorrido')
+        return Fracasso.objects.prefetch_related('comentarios', 'reacoes').order_by('-data_do_ocorrido')
 
 class FracassoListView(LoginRequiredMixin, ListView):
     """
@@ -32,7 +32,7 @@ class FracassoListView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         """Filtra os fracassos para mostrar apenas os do usuário logado."""
-        return Fracasso.objects.filter(usuario=self.request.user).order_by('-data_do_ocorrido')
+        return Fracasso.objects.filter(usuario=self.request.user).prefetch_related('comentarios', 'reacoes').order_by('-data_do_ocorrido')
 
 class FracassoCreateView(LoginRequiredMixin, CreateView):
     """
