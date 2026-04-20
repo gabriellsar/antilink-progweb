@@ -5,9 +5,17 @@
                 @{{ fracasso.usuario.username }}
             </a>
         </span>
-        <span class="post-date">{{ fracasso.data_do_ocorrido|date:"d/m/Y" }}</span>
-    </div>
-    
+        <div class="post-meta-right">
+            <span class="post-date">{{ fracasso.data_do_ocorrido|date:"d/m/Y" }}</span>
+            
+            {% if user == fracasso.usuario %}
+                <span class="post-owner-actions">
+                    <a href="{% url 'editar_fracasso' fracasso.id %}" title="Editar" style="color: #aaa; margin-left: 10px;"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a href="{% url 'deletar_fracasso' fracasso.id %}" title="Eliminar" style="color: #ff4c4c; margin-left: 10px;"><i class="fa-solid fa-trash-can"></i></a>
+                </span>
+            {% endif %}
+        </div>
+    </div>    
     <h3 class="post-title">{{ fracasso.titulo }}</h3>
     <p class="post-severity"> 
         Nível do Estrago: <strong>{{ fracasso.get_nivel_vergonha_display }}</strong>

@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+    <h2>Reescrever a História</h2>
+    <p class="page-subtitle">Ajuste os detalhes do seu desastre abaixo.</p>
+    <form method="post" class="mural-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div style="display: flex; gap: 10px;">   
+            <button type="submit" class="btn-danger" style="font-size: 16px;">Guardar Alterações</button>
+            <a href="{% url 'feed_global' %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

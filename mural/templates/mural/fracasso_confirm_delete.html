@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h2>Apagar Evidências?</h2>
+    <p>Tens a certeza de que queres eliminar o registo: <strong>"{{ object.titulo }}"</strong>?</p>
+    <p style="color: #888; margin-bottom: 30px;">Esta ação não pode ser desfeita.</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 10px; justify-content: center;"> 
+            <button type="submit" class="btn-danger" style="font-size: 16px;">Sim, Apagar para Sempre</button>
+            <a href="{% url 'feed_global' %}" class="btn-secondary">Não, deixa estar</a>
+        </div>   
+    </form>
+</div>
+{% endblock %}

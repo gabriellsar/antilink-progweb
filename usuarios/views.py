@@ -1,3 +1,5 @@
+from multiprocessing import context
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -43,7 +45,7 @@ class PerfilPublicoView(DetailView):
         """Injeta dados extras (fracassos, depoimentos e formulário) no template HTML."""
         context = super().get_context_data(**kwargs)
         context['fracassos'] = Fracasso.objects.filter(usuario=self.object).order_by('-data_do_ocorrido')
-        context['depoimentos'] = Fracasso.objects.filter(alvo=self.object).select_related('autor').order_by('-data_criacao')
+        context['depoimentos'] = self.object.depoimentos_recebidos.select_related('autor').order_by('-data_criacao')
         context['form_depoimento'] = DepoimentoForm()
         return context
     
@@ -53,7 +55,6 @@ class AdicionarDepoimentoView(LoginRequiredMixin, View):
     """
     def post(self, request, username):
         alvo = get_object_or_404(User, username=username)
-        form = DepoimentoForm(request.POST)
 
         if request.user == alvo:
             messages.error(request, "Auto-sabotagem é feio. Você não pode endossar a si mesmo.")

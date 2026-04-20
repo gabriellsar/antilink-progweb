@@ -7,3 +7,10 @@ __pycache__/
 *$py.class
 
 .env
+staticfiles/
+/staticfiles
+
+.vscode/
+.idea/
+
+/mural/management/*

@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (
-    FeedGlobalView, FracassoListView, FracassoCreateView, 
-    AdicionarComentarioView, AlternarReacaoView
+    FeedGlobalView, FracassoDeleteView, FracassoListView, FracassoCreateView, 
+    AdicionarComentarioView, AlternarReacaoView, FracassoUpdateView
 )
 
 urlpatterns = [
@@ -10,4 +10,7 @@ urlpatterns = [
     path('assumir-culpa/', FracassoCreateView.as_view(), name='assumir_culpa'),
     path('<int:fracasso_id>/comentar/', AdicionarComentarioView.as_view(), name='adicionar_comentario'),
     path('<int:fracasso_id>/reagir/', AlternarReacaoView.as_view(), name='alternar_reacao'),
+
+    path('fracasso/<int:pk>/editar/', FracassoUpdateView.as_view(), name='editar_fracasso'),
+    path('fracasso/<int:pk>/deletar/', FracassoDeleteView.as_view(), name='deletar_fracasso'),
 ]

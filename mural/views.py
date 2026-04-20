@@ -1,9 +1,9 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, View
+from django.views.generic import CreateView, ListView, View, UpdateView, DeleteView
 
 from .models import Comentario, Fracasso, Reacao
 from .forms import FracassoForm
@@ -48,6 +48,35 @@ class FracassoCreateView(LoginRequiredMixin, CreateView):
         form.instance.usuario = self.request.user
         messages.success(self.request, "Parabéns! Mais um fracasso registrado com sucesso no seu currículo!")
         return super().form_valid(form)
+    
+class FracassoUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Fracasso
+    form_class = FracassoForm
+    template_name = 'mural/fracasso_form.html'
+    success_url = reverse_lazy('feed_global')
+
+    def test_func(self):
+        """Garante que apenas o dono do post pode editar."""
+        fracasso = self.get_object()
+        return self.request.user == fracasso.usuario
+
+    def form_valid(self, form):
+        messages.success(self.request, "Fracasso atualizado! Pelo menos tentaste corrigir o erro.")
+        return super().form_valid(form)
+
+class FracassoDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Fracasso
+    template_name = 'mural/fracasso_confirm_delete.html'
+    success_url = reverse_lazy('feed_global')
+
+    def test_func(self):
+        """Garante que apenas o dono do post pode eliminar."""
+        fracasso = self.get_object()
+        return self.request.user == fracasso.usuario
+
+    def delete(self, request, *args, **kwargs):
+        messages.warning(request, "Fracasso eliminado. O rastro do erro sumiu, mas a vergonha permanece.")
+        return super().delete(request, *args, **kwargs)
 
 class AdicionarComentarioView(LoginRequiredMixin, View):
     """

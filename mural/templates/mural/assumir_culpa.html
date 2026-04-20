@@ -5,7 +5,7 @@
     <h2>Registrar Novo Desastre</h2>
     <p class="page-subtitle">Não tenha vergonha. Ou tenha, o problema é seu. Apenas preencha o formulário abaixo.</p>
     
-    <form method="post">
+    <form method="post" class="mural-form">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn-danger btn-large">Assumir a Culpa</button>
