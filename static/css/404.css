@@ -1,0 +1,79 @@
+.four-oh-four-wrapper {
+    position: fixed; 
+    top: 70px; /* Exatamente abaixo da navbar */
+    left: 0;
+    width: 100vw;
+    height: calc(100vh - 70px);
+    background-color: var(--bg-dark);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.wall-of-failure {
+    position: absolute;
+    top: -50%;
+    left: 0%;
+    width: 100vw;
+    height: 100vh;
+    font-size: 2.2rem;
+    font-weight: 900;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.04); /* Texto quase invisível */
+    text-align: center;
+    text-transform: uppercase;
+    pointer-events: none; /* Para os cliques passarem direto pro botão */
+    white-space: pre-wrap; /* Quebra as linhas naturalmente */
+    
+    animation: scroll-misery 90s linear infinite;
+}
+
+@keyframes scroll-misery {
+    0% { transform: translate(0, 0) }
+    100% { transform: translate(-10%, -20%) }
+}
+
+.vignette-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, transparent 15%, var(--bg-dark) 75%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.content-404 {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.huge-failure-text {
+    font-size: 13rem;
+    font-weight: 900;
+    color: var(--accent-orange);
+    margin: 0;
+    line-height: 1;
+    letter-spacing: -5px;
+    text-shadow: 0 10px 40px rgba(255, 69, 0, 0.2);
+}
+
+.four-oh-four-message {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-top: 10px;
+    margin-bottom: 40px;
+    background: rgba(18, 18, 18, 0.7);
+    padding: 15px 30px;
+    border-radius: 8px;
+    backdrop-filter: blur(5px);
+    border: 1px solid #333;
+}
