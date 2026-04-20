@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card profile-card-header">
+    <div class="profile-banner"></div>
+    
+    <div class="profile-info-container">
+        <div class="profile-avatar-large">
+            {{ perfil_usuario.username|first|upper }}
+        </div>
+        
+        <div class="profile-details">
+            <h1 class="profile-name">{{ perfil_usuario.username }}</h1>
+            <h3 class="profile-title">Engenheiro de Gambiarras Sênior | Sobrevivente de Prazos</h3>
+            <p class="profile-location-stats">Rio de Janeiro, Brasil · {{ fracassos|length }} falhas documentadas</p>
+        </div>
+    </div>
+</div>
+
+<div class="card profile-section-card">
+    <h2 class="section-title">Experiências Desastrosas</h2>
+    
+    <input type="radio" name="perfil-layout" id="layout-list" class="layout-radio" checked>
+    <input type="radio" name="perfil-layout" id="layout-grid" class="layout-radio">
+
+    <div class="layout-controls">
+        <label for="layout-list" class="layout-btn"><i class="fa-solid fa-list"></i> Lista</label>
+        <label for="layout-grid" class="layout-btn"><i class="fa-solid fa-border-all"></i> Grid</label>
+    </div>
+
+    <div class="experiences-container">
+        {% for fracasso in fracassos %}
+            <details class="experience-details">
+                <summary class="experience-summary">
+                    <span class="experience-title">{{ fracasso.titulo }}</span>
+                    <span class="experience-meta-badge">{{ fracasso.get_nivel_vergonha_display }}</span>
+                </summary>
+                
+                <div class="experience-content">
+                    <p class="experience-date">{{ fracasso.data_do_ocorrido|date:"M Y" }}</p>
+                    <p class="experience-desc">{{ fracasso.descricao }}</p>
+                    
+                    {% if fracasso.aprendizado %}
+                    <div class="experience-lesson">
+                        <strong>Lição aprendida:</strong> {{ fracasso.aprendizado }}
+                    </div>
+                    {% endif %}
+                </div>
+            </details>
+        {% empty %}
+            <p class="empty-section-msg">
+                Este usuário ainda não teve coragem de expor suas falhas, ou seu código não compila nem para gerar erro.
+            </p>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card profile-section-card">
+    <h2 class="section-title">Endossos de Incompetência</h2>
+    
+    {% if user.is_authenticated and user != perfil_usuario %}
+        <div class="endorsement-form-wrapper">
+            <form action="{% url 'adicionar_depoimento' perfil_usuario.username %}" method="post">
+                {% csrf_token %}
+                {{ form_depoimento.as_p }}
+                <button type="submit" class="btn-danger btn-endorse">
+                    <i class="fa-solid fa-bullhorn"></i> Publicar Ofensa Profissional
+                </button>
+            </form>
+        </div>
+    {% elif user == perfil_usuario %}
+        <p class="endorsement-self-msg"><i class="fa-solid fa-circle-info"></i> Você não pode endossar a si mesmo. Deixe que os outros te julguem.</p>
+    {% endif %}
+
+    <div class="endorsements-list">
+        {% for depoimento in depoimentos %}
+            <div class="endorsement-item">
+                <p class="endorsement-text">{{ depoimento.texto }}</p>
+                <div class="endorsement-meta">
+                    — Atestado por <strong><a href="{% url 'perfil_publico' depoimento.autor.username %}" class="endorsement-author">@{{ depoimento.autor.username }}</a></strong> em {{ depoimento.data_criacao|date:"d/m/Y" }}
+                </div>
+            </div>
+        {% empty %}
+            <p class="empty-section-msg">Ainda ninguém teve coragem de falar a verdade sobre este profissional.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

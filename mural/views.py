@@ -19,7 +19,7 @@ class FeedGlobalView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         """Retorna todos os fracassos ordenados pelos mais recentes."""
-        return Fracasso.objects.prefetch_related('comentarios', 'reacoes').order_by('-data_do_ocorrido')
+        return Fracasso.objects.select_related("usuario").prefetch_related('comentarios__autor', 'reacoes__usuario').order_by('-data_do_ocorrido')
 
 class FracassoListView(LoginRequiredMixin, ListView):
     """
@@ -32,7 +32,7 @@ class FracassoListView(LoginRequiredMixin, ListView):
     
     def get_queryset(self):
         """Filtra os fracassos para mostrar apenas os do usuário logado."""
-        return Fracasso.objects.filter(usuario=self.request.user).prefetch_related('comentarios', 'reacoes').order_by('-data_do_ocorrido')
+        return Fracasso.objects.filter(usuario=self.request.user).select_related('usuario').prefetch_related('reacoes__usuario', 'comentarios__autor').order_by('-data_do_ocorrido')
 
 class FracassoCreateView(LoginRequiredMixin, CreateView):
     """
@@ -62,7 +62,6 @@ class AdicionarComentarioView(LoginRequiredMixin, View):
             Comentario.objects.create(fracasso=fracasso, autor=request.user, texto=texto)
             messages.success(request, "Comentário registrado com sucesso.")
         
-        # Retorna magicamente para a aba/página que o usuário estava
         return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 class AlternarReacaoView(LoginRequiredMixin, View):

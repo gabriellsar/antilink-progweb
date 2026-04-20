@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Resultados da Caçada</h2>
+<p class="page-subtitle">Você buscou por: <strong>{{ request.GET.q }}</strong></p>
+
+<div class="card">
+    {% for usuario in usuarios %}
+        <div class="user-result-item">
+            <span class="user-result-name">@{{ usuario.username }}</span>
+            <a href="{% url 'perfil_publico' usuario.username %}" class="user-result-link">
+                <button class="btn-danger btn-small">Inspecionar Fracassos</button>
+            </a>
+        </div>
+    {% empty %}
+        <p class="empty-search-msg">
+            Nenhum incompetente encontrado com esse nome. Tente buscar outra pessoa.
+        </p>
+    {% endfor %}
+</div>
+{% endblock %}

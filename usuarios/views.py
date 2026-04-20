@@ -17,7 +17,7 @@ class CadastroView(CreateView):
     """
     form_class = UserCreationForm
     success_url = reverse_lazy('login')
-    template_name = 'usuarios/cadastro.html' 
+    template_name = 'usuarios/registration/cadastro.html' 
     
     def form_valid(self, form):
         """

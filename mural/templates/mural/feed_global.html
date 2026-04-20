@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card create-post-card">
+    <div class="create-post-header">
+        <div class="user-avatar">
+            {% if user.is_authenticated %}
+                {{ user.username.0|upper }}
+            {% else %}
+                <i class="fa-solid fa-user-astronaut"></i>
+            {% endif %}
+        </div>
+        
+        <a href="{% url 'assumir_culpa' %}" class="fake-input-wrapper">
+            <div class="fake-input">
+                Qual foi o seu maior fracasso de hoje?
+            </div>
+        </a>
+    </div>
+
+    <div class="create-post-actions">
+        <a href="{% url 'assumir_culpa' %}">
+            <button class="action-btn">
+                <i class="fa-solid fa-video"></i>
+                <span>Vídeo</span>
+            </button>
+        </a>
+        
+        <a href="{% url 'assumir_culpa' %}">
+            <button class="action-btn">
+                <i class="fa-solid fa-image"></i>
+                <span>Foto</span>
+            </button>
+        </a>
+        
+        <a href="{% url 'assumir_culpa' %}">
+            <button class="action-btn">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Contar história</span>
+            </button>
+        </a>
+    </div>
+</div>
+
+<div class="feed-divider-container">
+    <h2 class="feed-divider"></h2>
+</div>
+
+{% for fracasso in fracassos %}
+    {% include 'components/card_fracasso.html' with fracasso=fracasso %}
+{% empty %}
+    <div class="card empty-feed-card">
+        <p class="empty-feed-msg">Que milagre... Aparentemente todo mundo acertou o código hoje.</p>
+    </div>
+{% endfor %}
+{% endblock %}
