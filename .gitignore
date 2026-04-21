@@ -12,5 +12,3 @@ staticfiles/
 
 .vscode/
 .idea/
-
-/mural/management/*
