@@ -1,2 +1,57 @@
 # antilink-progweb
-[ENG1407] PROJETO PROGRAMAÇÃO PARA A WEB
+[ENG1407 PROJETO PROGRAMAÇÃO PARA A WEB
+
+# Relatório de Projeto: Anti-LinkedIn (Coach de Fracassos)
+
+O Anti-LinkedIn é uma aplicação web completa desenvolvida com o framework Django. A aplicação permite que profissionais de tecnologia documentem os seus piores erros técnicos, recebam julgamentos da comunidade e troquem depoimentos sobre falhas colaborativas.
+
+### Funcionalidades Implementadas
+* **Criação (Create):** Registo de novos "Fracassos", comentários em publicações e envio de depoimentos para perfis de outros utilizadores.
+* **Leitura (Read):** Feed global de publicações, lista de fracassos pessoais e visualização de perfis públicos.
+* **Atualização (Update):** Edição de publicações existentes pelo autor original, com restrição de acesso a nível de backend.
+* **Eliminação (Delete):** Remoção definitiva de publicações pelo autor e alternância de reações (like/deslike), que funciona através da criação ou eliminação de registos na base de dados.
+* **Gestão de Utilizadores:** Sistema de autenticação completo com registo, login e controle de acesso a páginas protegidas (*LoginRequiredMixin*).
+
+## Manual do Utilizador
+
+### Acesso Inicial e Registo
+1.  Ao aceder à aplicação, o utilizador é direcionado para a página de login.
+2.  Caso não possua conta, deve selecionar "Criar Conta" para preencher o formulário de registo.
+3.  Após o login, o acesso ao Feed Global é libertado.
+
+### Interação com o Mural
+* **Assumir Culpa:** No Feed Global, clique na barra de texto "Qual foi o seu maior fracasso de hoje?". Preencha o título, descrição e nível de vergonha do desastre técnico.
+* **Reagir e Comentar:** Abaixo de cada publicação, é possível selecionar diferentes tipos de reações (Mão na testa, Riso, etc.) ou deixar um comentário passivo-agressivo.
+* **Gestão de Publicações:** O autor de um fracasso verá ícones de edição (lápis) e eliminação (lixo) no canto superior direito do card. Utilizadores que não são autores não visualizam estas opções.
+
+### Perfis e Busca
+* Utilize a barra de busca na barra de navegação para encontrar outros utilizadores pelo nome de utilizador.
+* No perfil de outro utilizador, pode ler todas as falhas documentadas por ele e preencher o formulário de "Endosso de Incompetência" para relatar experiências de trabalho negativas com essa pessoa.
+
+## Relatório de Testes e Funcionamento
+
+### O que funcionou conforme o esperado
+* **Suíte de Testes:** Foram executados 7 testes automatizados abrangendo autenticação, busca de utilizadores, proteção de rotas e segurança contra auto-endosso (todos aprovados com sucesso).
+* **Navegação:** O sistema de redirecionamento dinâmico após comentários e reações (`HTTP_REFERER`) permite uma navegação fluida sem perda de contexto.
+* **Segurança de Dados:** Utilizadores não conseguem editar ou eliminar conteúdos de terceiros, validação realizada no backend via `UserPassesTestMixin`.
+* **Geração de Dados:** O comando `python manage.py popular_banco` popula a base de dados com nomes brasileiros e termos técnicos reais de TI.
+
+### Limitações Conhecidas
+* A aplicação não suporta carregamento de imagens ou vídeos.
+
+## Instruções para Execução via Docker
+Para executar o projeto localmente utilizando containers, siga os passos abaixo:
+
+1.  Certifique-se de que o Docker e o Docker Compose estão instalados.
+2.  Clone o repositório.
+3.  Crie um ficheiro `.env` na raiz com as variáveis `SECRET_KEY`, `DEBUG`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_HOST`.
+4.  Execute o comando para construir e subir os containers:
+    ```bash
+    docker-compose up --build
+    ```
+5.  Em outro terminal, execute as migrações e o script de população de dados:
+    ```bash
+    docker-compose exec web python manage.py migrate
+    docker-compose exec web python manage.py popular_banco
+    ```
+6.  Aceda à aplicação em `http://localhost:8000`.
