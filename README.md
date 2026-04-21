@@ -44,14 +44,55 @@ Para executar o projeto localmente utilizando containers, siga os passos abaixo:
 
 1.  Certifique-se de que o Docker e o Docker Compose estão instalados.
 2.  Clone o repositório.
-3.  Crie um ficheiro `.env` na raiz com as variáveis `SECRET_KEY`, `DEBUG`, `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD` e `POSTGRES_HOST`.
-4.  Execute o comando para construir e subir os containers:
+3.  Crie um ficheiro `.env` na raiz com as variáveis 
+    ```bash
+    # Configurações de Segurança do Django
+    SECRET_KEY=chave_de_avaliacao_eng1407
+    DEBUG=True
+
+    # Credenciais da Base de Dados PostgreSQL
+    POSTGRES_DB=coach_db
+    POSTGRES_USER=admin_coach
+    POSTGRES_PASSWORD=senha_secreta_123
+    POSTGRES_HOST=db
+    ```
+
+4. Crie um ficheiro chamado `docker-compose.yml` no mesmo diretório
+    ```YML
+    services:
+        db:
+            image: postgres:15
+            volumes:
+            - postgres_data:/var/lib/postgresql/data
+            env_file:
+            - .env
+            ports:
+            - "5432:5432"
+
+        web:
+            image: utilizador/antilink-progweb:v1
+            command: python manage.py runserver 0.0.0.0:8000
+            volumes:
+            - .:/app
+            ports:
+            - "8000:8000"
+            env_file:
+            - .env
+            depends_on:
+            - db
+
+    volumes:
+        postgres_data:
+    ```
+
+5.  Execute o comando para construir e subir os containers:
     ```bash
     docker-compose up --build
     ```
-5.  Em outro terminal, execute as migrações e o script de população de dados:
+6.  Em outro terminal, execute as migrações e o script de população de dados:
     ```bash
     docker-compose exec web python manage.py migrate
     docker-compose exec web python manage.py popular_banco
     ```
-6.  Aceda à aplicação em `http://localhost:8000`.
+
+
