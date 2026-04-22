@@ -1,5 +1,7 @@
 # Anti-LinkedIn
 
+GABRIEL ROSAS 2210689
+
 O Anti-LinkedIn é uma aplicação web desenvolvida com Django. A aplicação permite que profissionais de tecnologia documentem os seus piores erros técnicos, recebam julgamentos da comunidade e troquem depoimentos sobre falhas colaborativas.
 
 ### Funcionalidades Implementadas
