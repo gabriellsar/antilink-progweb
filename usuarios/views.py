@@ -1,16 +1,14 @@
-from multiprocessing import context
-
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, ListView, View
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView, View
 from django.contrib import messages
 
-from .models import Depoimento
-from .forms import DepoimentoForm
+from .forms import DepoimentoForm, PerfilUpdateForm
 from mural.models import Fracasso
+from usuarios.models import Perfil
 
 class CadastroView(CreateView):
     """
@@ -27,6 +25,32 @@ class CadastroView(CreateView):
         """
         messages.success(self.request, "Sua conta foi criada. Prepare-se para a decepção.")
         return super().form_valid(form)
+    
+class DeletarContaView(LoginRequiredMixin, DeleteView):
+    """Permite ao usuário deletar sua própria conta de forma irreversível."""
+    model = User
+    template_name = 'usuarios/apagar_conta.html'
+    success_url = reverse_lazy('login')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+        
+    def delete(self, request, *args, **kwargs):
+        messages.error(request, "Sua conta foi deletada. Você fugiu do abismo corporativo.")
+        return super().delete(request, *args, **kwargs)
+    
+class EditarPerfilView(LoginRequiredMixin, UpdateView):
+    """Permite ao usuário logado alterar seu Título e Localização."""
+    model = Perfil
+    form_class = PerfilUpdateForm
+    template_name = 'usuarios/editar_perfil.html'
+    
+    def get_object(self, queryset=None):
+        return self.request.user.perfil
+
+    def get_success_url(self):
+        messages.success(self.request, "Informações atualizadas com sucesso.")
+        return reverse_lazy('perfil_publico', kwargs={'username': self.request.user.username})
 
 class PerfilPublicoView(DetailView):
     """

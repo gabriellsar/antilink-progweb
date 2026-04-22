@@ -10,9 +10,20 @@
         </div>
         
         <div class="profile-details">
-            <h1 class="profile-name">{{ perfil_usuario.username }}</h1>
-            <h3 class="profile-title">Engenheiro de Gambiarras Sênior | Sobrevivente de Prazos</h3>
-            <p class="profile-location-stats">Rio de Janeiro, Brasil · {{ fracassos|length }} falhas documentadas</p>
+            <div style="display: flex; gap: 65%;">
+                <h1 class="profile-name">{{ perfil_usuario.username }}</h1>
+                {% if user == perfil_usuario %}
+                <a href="{% url 'editar_perfil' %}" class="btn-secondary">
+                    <i class="fa-solid fa-user-gear"></i> Editar Perfil
+                </a>
+                {% endif %}
+            </div>
+            
+            <p class="profile-title">{{ perfil_usuario.perfil.titulo }}</p>
+            <p class="profile-location-stats">
+                <i class="fa-solid fa-location-dot"></i> {{ perfil_usuario.perfil.localizacao }}
+            </p>
+            
         </div>
     </div>
 </div>

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Depoimento
+from .models import Depoimento, Perfil
 
 class DepoimentoForm(forms.ModelForm):
     class Meta:
@@ -13,4 +13,13 @@ class DepoimentoForm(forms.ModelForm):
         }
         labels = {
             'texto': 'Deixe um endosso de incompetência'
+        }
+
+class PerfilUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Perfil
+        fields = ['titulo', 'localizacao']
+        labels = {
+            'titulo': 'Título Profissional',
+            'localizacao': 'Localização'
         }

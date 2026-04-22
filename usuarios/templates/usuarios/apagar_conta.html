@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card" style="text-align: center;">
+    <h2>Deletar conta?</h2>
+    <p>Você está prestes a deletar a sua conta e todo o seu histórico de fracassos.</p>
+    <p style="color: #ff4c4c; font-weight: bold; margin-bottom: 30px;">Esta ação é irreversível</p>
+    
+    <form method="post">
+        {% csrf_token %}
+        <div style="display: flex; gap: 10px; justify-content: center;"> 
+            <button type="submit" class="btn-danger">Sim, apagar minha conta</button>
+            <a href="{% url 'perfil_publico' user.username %}"class="btn-secondary" style="margin-left: 15px;">Não, vou continuar sofrendo</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

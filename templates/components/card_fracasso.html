@@ -98,7 +98,7 @@
             </form>
 
             <div>
-                {% for comentario in fracasso.comentarios.all|slice:":3" %}
+                {% for comentario in fracasso.comentarios.all %}
                     <div class="comentario-item">
                         <strong class="comment-author">@{{ comentario.autor.username }}:</strong> 
                         <span class="comment-text">{{ comentario.texto }}</span>

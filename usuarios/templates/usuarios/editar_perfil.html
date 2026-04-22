@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card">
+    <h2><i class="fa-solid fa-gear" style="color: var(--accent-orange);"></i> Configurações da Conta</h2>
+    <p class="page-subtitle">Ajuste suas informações abaixo.</p>
+    
+    <form method="post" class="mural-form">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <div style="display: flex; gap: 15px; margin-top: 20px;">
+            <button type="submit" class="btn-danger">Salvar Alterações</button>
+            <a href="{% url 'perfil_publico' user.username %}" class="btn-secondary">Cancelar</a>
+        </div>
+    </form>
+    
+    <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #333; text-align: right;">
+        <a href="{% url 'deletar_conta' %}" style="color: #555; font-size: 0.85em; text-decoration: none; transition: color 0.3s;" onmouseover="this.style.color='#ff4c4c'" onmouseout="this.style.color='#555'">
+            <i class="fa-solid fa-skull"></i> Apagar minha existência do sistema
+        </a>
+    </div>
+</div>
+{% endblock %}
