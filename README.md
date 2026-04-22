@@ -26,6 +26,7 @@ O Anti-LinkedIn é uma aplicação web desenvolvida com Django. A aplicação pe
 ### Perfis e Busca
 * Utilize a barra de busca na barra de navegação para encontrar outros utilizadores pelo nome de utilizador.
 * No perfil de outro utilizador, pode ler todas as falhas documentadas por ele e preencher o formulário de "Endosso de Incompetência" para relatar experiências de trabalho negativas com essa pessoa.
+* Em seu perfil o usuário tem a opção de editar as informações de seu banner ( além do que foi citado antes ) 
 
 ## Testes e Funcionamento
 
@@ -38,8 +39,6 @@ O Anti-LinkedIn é uma aplicação web desenvolvida com Django. A aplicação pe
 * Não foram encontrados erros.
 
 ## Instruções para Execução via Docker
-Para executar o projeto localmente utilizando containers, siga os passos abaixo:
-
 1.  Certifique-se de que o Docker e o Docker Compose estão instalados.
 3.  Crie um ficheiro `.env` na raiz com as variáveis 
     ```bash
@@ -67,7 +66,7 @@ Para executar o projeto localmente utilizando containers, siga os passos abaixo:
                 - "5432:5432"
 
         web:
-            image: utilizador/antilink-progweb:v1
+            image: gabriellsar/antilink-progweb:v1
             command: python manage.py runserver 0.0.0.0:8000
             ports:
                 - "8000:8000"
